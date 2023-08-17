@@ -1,7 +1,7 @@
 <template>
-    <WelcomeItem />
+    <AppBars />
 </template>
 
 <script setup>
-import WelcomeItem from '../components/WelcomeItem.vue';
+import AppBars from '../components/AppBars.vue';
 </script>
