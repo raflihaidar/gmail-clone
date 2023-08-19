@@ -1,12 +1,12 @@
 <template>
     <div class="flex w-full border-2 justify-between items-center px-4 py-4 bg-slate-100">
         <div class="flex items-center gap-x-2 w-[20%]">
-            <div data-drawer-target="drawer-example" data-drawer-show="drawer-example" aria-controls="drawer-example"
-                @click="OpenSideBar" v-show="sideBarStatus" data-drawer-backdrop="false">
+            <div data-drawer-target="sidebar" data-drawer-show="sidebar" aria-controls="sidebar" @click="OpenSideBar"
+                v-show="sideBarStatus" data-drawer-backdrop="false" data-drawer-body-scrolling="false">
                 <IconComponent iconString="menu" text="Menu Utama" />
             </div>
-            <div data-drawer-target="drawer-example" data-drawer-hide="drawer-example" aria-controls="drawer-example"
-                @click="OpenSideBar" v-show="!sideBarStatus" data-drawer-backdrop="false">
+            <div data-drawer-target="sidebar" data-drawer-hide="sidebar" aria-controls="sidebar" @click="OpenSideBar"
+                v-show="!sideBarStatus" data-drawer-backdrop="false" data-drawer-body-scrolling="false">
                 <IconComponent iconString="menu" text="Menu Utama" />
             </div>
             <div class="cursor-pointer">
@@ -32,12 +32,12 @@
 
 
 <script setup>
-import { ref, watchEffect } from 'vue';
+import { ref, watchEffect, inject } from 'vue';
 import IconComponent from './IconComponent.vue';
 
 const search = ref(false)
 const searchInput = ref("");
-const sideBarStatus = ref(true);
+const sideBarStatus = inject('sideBarstatus');
 
 const OpenSideBar = () => {
     sideBarStatus.value = !sideBarStatus.value
