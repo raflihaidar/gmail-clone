@@ -22,10 +22,12 @@
             <IconComponent iconString="close" :display="searchInput" @click="handleDeleteInput" text="Close" />
         </div>
 
-        <div class="flex justify-end w-[30%] gap-x-7">
+        <div class="flex justify-end items-center w-[30%] gap-x-7">
             <IconComponent iconString="help" text="Help" />
             <IconComponent iconString="settings" text="Settings" />
             <IconComponent iconString="dots" text="Google Aplications" />
+            <div class="bg-slate-200 rounded-full w-11 h-11">
+            </div>
         </div>
     </div>
 </template>

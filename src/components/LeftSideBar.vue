@@ -5,81 +5,65 @@
             tabindex="-1" aria-labelledby="sidebar">
             <div class="h-full py-4 overflow-y-auto bg-slate-100">
                 <ul>
-                    <li class="flex items-center bg-sky-200 w-[50%] text-center gap-x-2 px-3 py-4 rounded-lg text-sm"
+                    <li class="flex items-center bg-sky-200 w-[50%] text-center gap-x-2 px-3 py-4 rounded-lg text-sm mb-5 hover:shadow-lg transition-shadow"
                         @click="newOpenMessage = !newOpenMessage">
                         <PencilIcon :size="25" />
                         <span>Compose</span>
                     </li>
                 </ul>
 
-                <ul class="mt-5 text-center w-full mx-auto text-sm font-semibold">
-                    <li class="flex justify-between py-2 pr-4 pl-4 w-full bg-blue-200 rounded-r-full">
+                <ul v-for="(item, index) in leftBarMenu" :key="index"
+                    class="text-center w-full mx-auto text-sm font-semibold">
+                    <li class="flex justify-between py-2 pr-4 pl-4 w-full rounded-r-full cursor-pointer"
+                        @click="handleIsClick(index)"
+                        :class="item.isClick ? 'bg-blue-200' : 'hover:bg-gray-200 transition-colors'">
                         <div class="flex gap-x-5 ">
-                            <InboxIcon :size="17" />
-                            <span>Inbox</span>
+                            <component :is="item.icon" :size="17" />
+                            <span>{{ item.name }}</span>
                         </div>
                         <p>26</p>
-                    </li>
-                    <li class="flex justify-between py-2 pr-4 pl-4 w-full">
-                        <div class="flex gap-x-5">
-                            <StarIcon :size="17" />
-                            <span>Starred</span>
-                        </div>
-                    </li>
-                    <li class="flex justify-between py-2 pr-4 pl-4 w-full">
-                        <div class="flex gap-x-5">
-                            <ClockIcon :size="17" />
-                            <span>Snoozed</span>
-                        </div>
-                    </li>
-                    <li class="flex justify-between py-2 pr-4 pl-4 w-full">
-                        <div class="flex gap-x-5">
-                            <SendIcon :size="17" />
-                            <span>Sent</span>
-                        </div>
-                    </li>
-                    <li class="flex justify-between py-2 pr-4 pl-4 w-full">
-                        <div class="flex gap-x-5">
-                            <FileIcon :size="17" />
-                            <span>Drafts</span>
-                        </div>
                     </li>
                 </ul>
             </div>
         </aside>
 
 
-        <div class="w-[37%] h-[73vh] shadow-xl bg-white fixed z-20 bottom-0 right-12 rounded-lg" v-if="newOpenMessage">
+        <div class="w-[37%] h-[73vh] shadow-xl bg-white fixed z-20 bottom-0 right-12 rounded-lg" v-if="newOpenMessage"
+            id="popUp-messages">
             <div class="flex justify-between items-center bg-slate-100 text-sm px-3">
                 <p>New Messages</p>
                 <div class="flex w-20% items-center">
-                    <IconComponent text="Minus" iconString="minus" size="17" />
-                    <IconComponent text="Full Screen" iconString="fullScreen" size="17" />
-                    <IconComponent text="Save & Close" iconString="close" size="17"
-                        @click="newOpenMessage = !newOpenMessage" />
+                    <IconComponent text="Minus" iconString="minus" :size="17" @click="handleMinimize" id="minus" />
+                    <IconComponent text="Full Screen" iconString="fullScreen" :size="17" />
+                    <IconComponent text="Save & Close" iconString="close" :size="17" @click="saveNSlose" />
                 </div>
             </div>
             <div class="border-b-2 border-gray-100 py-1">
-                <input type="text" placeholder="Recipients" class="w-full border-none outline-none focus:ring-0 text-sm">
+                <input type="text" placeholder="Recipients" class="w-full border-none outline-none focus:ring-0 text-sm"
+                    v-model="payload.to">
             </div>
             <div class="border-b-2 border-gray-100 py-1">
-                <input type="text" placeholder="Subject" class="w-full border-none outline-none focus:ring-0 text-sm">
+                <input type="text" placeholder="Subject" class="w-full border-none outline-none focus:ring-0 text-sm"
+                    v-model="payload.subject">
             </div>
             <div>
-                <textarea id="textArea" class="w-full h-80 resize-none focus:ring-0"></textarea>
+                <textarea id="textArea" class="w-full h-80 resize-none focus:ring-0 border-none"
+                    v-model="payload.content"></textarea>
             </div>
             <div class="flex w-full px-3 justify-between items-center">
-                <button class="bg-blue-600 rounded-full text-white w-20 py-2">
+                <button class="bg-blue-600 rounded-full text-white w-20 py-2" @click="addData(payload)">
                     Send
                 </button>
 
-                <IconComponent size="17" iconString="trash" text="Delete" />
+                <IconComponent :size="17" iconString="trash" text="Discard Draft" @click="discardDraft" />
             </div>
         </div>
     </div>
 
-    <div :class="sideBarstatus ? 'ml-0' : 'ml-72'" class="p-3 bg-slate-200">
-        <SentPage :sideBarStatus="sideBarstatus" />
+    <div v-for="(item, index) in leftBarMenu" :key="index">
+        <div v-if="item.isClick">
+            <component :is="item.components" :sideBarStatus="sideBarstatus" />
+        </div>
     </div>
 </template>
 
@@ -92,12 +76,109 @@ import SendIcon from "vue-material-design-icons/SendOutline.vue"
 import FileIcon from "vue-material-design-icons/FileOutline.vue"
 import IconComponent from "./IconComponent.vue"
 import SentPage from "./SentPage.vue"
-import { ref, inject } from "vue"
+import testing from "./testing.vue"
+import { ref, inject, reactive } from "vue"
+import { useDataDummyStore } from "../stores/dataDummy"
+import { storeToRefs } from "pinia"
 
 const sideBarstatus = inject('sideBarstatus', ref(false))
-
+const dataDummyStore = useDataDummyStore()
+const { datas } = storeToRefs(dataDummyStore)
+const lastElement = datas.value.slice(-1)
+const count = ref(lastElement.id)
+const month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
 const newOpenMessage = ref(false)
+const d = new Date();
+
+let payload = reactive({
+    id: count.value,
+    name: "Rafli Haidar Nashif",
+    to: "",
+    subject: "",
+    content: "",
+    date: d.getDate(),
+    month: month[d.getMonth()]
+})
+
+let leftBarMenu = reactive(
+    [
+        {
+            name: "Inbox",
+            isClick: false,
+            icon: InboxIcon,
+            components: testing
+        },
+        {
+            name: "Starred",
+            isClick: false,
+            icon: StarIcon,
+            components: testing
+        },
+        {
+            name: "Snoozed",
+            isClick: false,
+            icon: ClockIcon,
+            components: testing
+        },
+        {
+            name: "Sent",
+            isClick: true,
+            icon: SendIcon,
+            components: SentPage
+        },
+        {
+            name: "Drafts",
+            isClick: false,
+            icon: FileIcon,
+            components: testing
+        },
+    ]
+)
+
+const addData = async (payload) => {
+    dataDummyStore.addData(payload)
+    newOpenMessage.value = false
+}
+
+const handleIsClick = (index) => {
+    leftBarMenu.forEach((x) => {
+        if (x !== leftBarMenu[index]) x.isClick = false
+        else if (x === leftBarMenu[index]) x.isClick = true
+    })
+}
+
+const discardDraft = () => {
+    payload = {
+        id: count.value,
+        name: "Rafli Haidar Nashif",
+        to: "",
+        subject: "",
+        content: "",
+        date: d.getDate(),
+        month: month[d.getMonth()]
+    }
+    newOpenMessage.value = false
+}
+
+const saveNSlose = () => {
+    discardDraft()
+}
+
+const handleMinimize = (event) => {
+    const target = document.querySelector("#popUp-messages");
+    const minusButton = document.querySelector("#minus");
+    const isClickedOnMinusButton = minusButton.contains(event.target);
+
+    if (isClickedOnMinusButton) {
+        target.classList.toggle('-bottom-[30rem]');
+    } else {
+        target.classList.toggle('bottom-0');
+    }
+
+    console.log(event.target);
+};
+
+
+
+
 </script>
-
-
-<style></style>

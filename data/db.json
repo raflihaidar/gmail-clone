@@ -1,0 +1,31 @@
+{
+  "transmitter": [
+    {
+      "id": 1,
+      "name": "Rafli Haidar",
+      "to": "HRD",
+      "subject": "CV_Recruitment_Web Developer",
+      "content": "Nama Saya Rafli Haidar Nashif",
+      "date": 17,
+      "month": "Sept"
+    },
+    {
+      "name": "Rafli Haidar Nashif",
+      "to": "devina",
+      "subject": "permintaan maaf",
+      "content": "aku minta maaf",
+      "date": 21,
+      "month": "Aug",
+      "id": 2
+    },
+    {
+      "name": "Rafli Haidar Nashif",
+      "to": "devina",
+      "subject": "tugas",
+      "content": "halo ini tugasnya kapan deadline nya",
+      "date": 21,
+      "month": "Aug",
+      "id": 3
+    }
+  ]
+}

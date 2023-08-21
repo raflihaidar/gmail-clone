@@ -1,31 +1,75 @@
 <template>
-    <div class="w-full h-14 border-b-2 flex items-center justify-between gap-x-2 ">
-        <div class="flex items-center  w-[30%]">
-            <IconComponent :size="19" text="Select" iconString="checkbox" />
-            <IconComponent :size="19" text="Not Starred" iconString="star" />
-            <div>To : Rafli Haidar</div>
+    <div :class="sideBarStatus ? 'ml-0' : 'ml-72'">
+        <div class="w-full flex items-center justify-between">
+            <div class="flex w-[65%]">
+                <IconComponent iconString="checkbox" text="Select" :size="19" />
+                <IconComponent iconString="refresh" text="Refresh" :size="19" />
+                <IconComponent iconString="more" text="More" :size="19" />
+            </div>
+            <div :class="sideBarStatus ? 'pl-56' : 'pl-40'" class="flex items-center w-[35%] box-border mx-auto">
+                <span class="text-sm text-gray-500 hover:bg-slate-200 p-2 rounded-lg">1 - 50 of 2,859</span>
+                <IconComponent iconString="left" text="Newer" :size="19" />
+                <IconComponent iconString="right" text="Older" :size="19" />
+                <IconComponent iconString="pencil" text="input tools on/of" :size="19" />
+            </div>
         </div>
-        <div class="flex items-center  w-[45%]">
-            <div class="p-3">Halo ini dari sent page</div>
-        </div>
-        <div class="flex items-center w-[25%]" :class="sideBarStatus ? '-mr-56' : '-mr-40'">
-            <!-- <IconComponent :size="19" text="Archive" iconString="archive" />
-            <IconComponent :size="19" text="Delete" iconString="trash" />
-            <IconComponent :size="19" text="Mark as Unread" iconString="email" />
-            <IconComponent :size="19" text="Snooze" iconString="clock" /> -->
-            <div>Auf 17</div>
+        <div class="p-auto border-b-2 border-gray-200" v-for="(item, index) in datas" :key="index">
+            <div class="w-full h-auto flex items-center justify-between gap-x-2 text-sm hover:shadow-xl"
+                @mouseover="setHover(index, true)" @mouseleave="setHover(index, false)">
+                <div class="flex items-center w-[17%] mx-auto">
+                    <IconComponent :size="19" text="Select" iconString="checkbox" />
+                    <IconComponent :size="19" text="Not Starred" iconString="star" />
+                    <div>To : {{ item.to }}</div>
+                </div>
+                <div class="flex items-center w-[60%] mx-auto">
+                    <span>{{ item.subject }} </span>
+                    <span class="mx-1">-</span>
+                    <span class="text-gray-500">{{ item.content }}</span>
+                </div>
+                <div class="flex items-center w-[25%] box-border mx-auto">
+                    <div v-if="hoverIndex === index" class="flex items-center" :class="sideBarStatus ? 'pl-28' : 'pl-16'">
+                        <IconComponent :size="19" text="Archive" iconString="archive" />
+                        <IconComponent :size="19" text="Delete" iconString="trash" @click="deleteDataMessages(item.id)" />
+                        <IconComponent :size="19" text="Mark as Unread" iconString="email" />
+                        <IconComponent :size="19" text="Snooze" iconString="clock" />
+                    </div>
+                    <div v-else :class="sideBarStatus ? 'pl-56' : 'pl-40'">{{ item.month }} {{ item.date }}
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
 
 
 <script setup>
-import { toRefs } from 'vue';
+import { onBeforeMount, toRefs, ref } from 'vue';
 import IconComponent from './IconComponent.vue';
+import { useDataDummyStore } from '../stores/dataDummy';
+import { storeToRefs } from 'pinia';
+
+const hoverIndex = ref(null)
+
+
+const DummyStore = useDataDummyStore()
+const { sideBarStatus } = toRefs(props)
+const { datas } = storeToRefs(DummyStore)
 
 const props = defineProps({
-    sideBarStatus: Boolean
+    sideBarStatus: Boolean,
 })
 
-const { sideBarStatus } = toRefs(props)
+const setHover = (index, isHover) => {
+    hoverIndex.value = isHover ? index : null;
+    console.log(hoverIndex.value)
+}
+
+const deleteDataMessages = (id) => {
+    DummyStore.deleteData(id)
+}
+
+onBeforeMount(() => {
+    DummyStore.getDataDummy()
+})
+
 </script>

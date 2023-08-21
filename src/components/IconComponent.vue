@@ -11,7 +11,7 @@
 </template>
 
 <script setup>
-import { toRefs, defineProps, ref } from "vue"
+import { toRefs, defineProps, ref, shallowRef } from "vue"
 import MenuIcon from "vue-material-design-icons/Menu.vue";
 import SearchIcon from "vue-material-design-icons/Magnify.vue"
 import HelpIcon from "vue-material-design-icons/HelpCircleOutline.vue"
@@ -26,6 +26,11 @@ import StarOutline from "vue-material-design-icons/StarOutline.vue";
 import ArchiveIcon from "vue-material-design-icons/ArchiveArrowDownOutline.vue"
 import EmailIcon from "vue-material-design-icons/EmailOutline.vue"
 import ClockIcon from "vue-material-design-icons/ClockOutline.vue"
+import RefreshIcon from "vue-material-design-icons/Refresh.vue"
+import MoreIcon from "vue-material-design-icons/DotsVertical.vue"
+import RightArrow from "vue-material-design-icons/ChevronRight.vue"
+import LeftArrow from "vue-material-design-icons/ChevronLeft.vue"
+import PencilIcon from "vue-material-design-icons/PencilOutline.vue"
 
 const props = defineProps({
     iconString: String,
@@ -37,20 +42,25 @@ const props = defineProps({
 const { iconString, display, text, size } = toRefs(props)
 
 const iconMap = {
-    menu: MenuIcon,
-    search: SearchIcon,
-    help: HelpIcon,
-    dots: DotsIcon,
-    settings: SettingIcon,
-    close: CloseIcon,
-    fullScreen: FullScreenIcon,
-    minus: MinusIcon,
-    trash: TrashIcon,
-    checkbox: CheckboxIcon,
-    star: StarOutline,
-    archive: ArchiveIcon,
-    email: EmailIcon,
-    clock: ClockIcon
+    menu: shallowRef(MenuIcon),
+    search: shallowRef(SearchIcon),
+    help: shallowRef(HelpIcon),
+    dots: shallowRef(DotsIcon),
+    settings: shallowRef(SettingIcon),
+    close: shallowRef(CloseIcon),
+    fullScreen: shallowRef(FullScreenIcon),
+    minus: shallowRef(MinusIcon),
+    trash: shallowRef(TrashIcon),
+    checkbox: shallowRef(CheckboxIcon),
+    star: shallowRef(StarOutline),
+    archive: shallowRef(ArchiveIcon),
+    email: shallowRef(EmailIcon),
+    clock: shallowRef(ClockIcon),
+    refresh: shallowRef(RefreshIcon),
+    more: shallowRef(MoreIcon),
+    right: shallowRef(RightArrow),
+    left: shallowRef(LeftArrow),
+    pencil: shallowRef(PencilIcon)
 }
 
 let icon = ref(iconMap[iconString.value] || null)
