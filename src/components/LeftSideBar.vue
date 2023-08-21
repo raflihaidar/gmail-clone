@@ -59,12 +59,6 @@
             </div>
         </div>
     </div>
-
-    <div v-for="(item, index) in leftBarMenu" :key="index">
-        <div v-if="item.isClick">
-            <component :is="item.components" :sideBarStatus="sideBarstatus" />
-        </div>
-    </div>
 </template>
 
 <script setup>
@@ -75,13 +69,11 @@ import ClockIcon from "vue-material-design-icons/ClockOutline.vue"
 import SendIcon from "vue-material-design-icons/SendOutline.vue"
 import FileIcon from "vue-material-design-icons/FileOutline.vue"
 import IconComponent from "./IconComponent.vue"
-import SentPage from "./SentPage.vue"
-import testing from "./testing.vue"
-import { ref, inject, reactive } from "vue"
+import router from "../router"
+import { ref, reactive } from "vue"
 import { useDataDummyStore } from "../stores/dataDummy"
 import { storeToRefs } from "pinia"
 
-const sideBarstatus = inject('sideBarstatus', ref(false))
 const dataDummyStore = useDataDummyStore()
 const { datas } = storeToRefs(dataDummyStore)
 const lastElement = datas.value.slice(-1)
@@ -104,33 +96,33 @@ let leftBarMenu = reactive(
     [
         {
             name: "Inbox",
-            isClick: false,
+            isClick: true,
             icon: InboxIcon,
-            components: testing
+            path: 'inbox'
         },
         {
             name: "Starred",
             isClick: false,
             icon: StarIcon,
-            components: testing
+            path: 'starred'
         },
         {
             name: "Snoozed",
             isClick: false,
             icon: ClockIcon,
-            components: testing
+            path: 'snoozed'
         },
         {
             name: "Sent",
-            isClick: true,
+            isClick: false,
             icon: SendIcon,
-            components: SentPage
+            path: "sent"
         },
         {
             name: "Drafts",
             isClick: false,
             icon: FileIcon,
-            components: testing
+            path: 'draft'
         },
     ]
 )
@@ -145,6 +137,7 @@ const handleIsClick = (index) => {
         if (x !== leftBarMenu[index]) x.isClick = false
         else if (x === leftBarMenu[index]) x.isClick = true
     })
+    router.push({ name: `${leftBarMenu[index].path}` })
 }
 
 const discardDraft = () => {
@@ -164,20 +157,16 @@ const saveNSlose = () => {
     discardDraft()
 }
 
-const handleMinimize = (event) => {
-    const target = document.querySelector("#popUp-messages");
-    const minusButton = document.querySelector("#minus");
-    const isClickedOnMinusButton = minusButton.contains(event.target);
-
-    if (isClickedOnMinusButton) {
-        target.classList.toggle('-bottom-[30rem]');
+const handleMinimize = (even) => {
+    const clickedElement = even.target;
+    const target = document.querySelector("#popUp-messages")
+    const minusButton = document.querySelector("#minus")
+    if (minusButton.contains(clickedElement) && target.classList.contains('bottom-0')) {
+        target.className = target.className.replace('bottom-0', '-bottom-[30rem]')
     } else {
-        target.classList.toggle('bottom-0');
+        target.className = target.className.replace('-bottom-[30rem]', 'bottom-0')
     }
-
-    console.log(event.target);
-};
-
+}
 
 
 

@@ -4,6 +4,7 @@ import { computed, ref } from 'vue'
 
 export const useDataDummyStore = defineStore('dataDummy', () => {
   const data = ref([])
+  const singleData = ref({})
 
   const url = 'http://localhost:5000/transmitter'
 
@@ -16,6 +17,15 @@ export const useDataDummyStore = defineStore('dataDummy', () => {
         data.value = res.data
       })
       .catch((err) => console.log('error', err))
+  }
+
+  const getDataDetail = async (id) => {
+    try {
+      const res = await axios.get(url + '/' + id)
+      singleData.value = res.data
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   const addData = async (payload) => {
@@ -39,7 +49,9 @@ export const useDataDummyStore = defineStore('dataDummy', () => {
   return {
     data,
     datas,
+    singleData,
     getDataDummy,
+    getDataDetail,
     addData,
     deleteData
   }

@@ -1,6 +1,7 @@
 <template>
     <AppBars />
     <LeftSideBar />
+    <router-view />
     <RightSideBar />
 </template>
 
