@@ -31,6 +31,9 @@ import MoreIcon from "vue-material-design-icons/DotsVertical.vue"
 import RightArrow from "vue-material-design-icons/ChevronRight.vue"
 import LeftArrow from "vue-material-design-icons/ChevronLeft.vue"
 import PencilIcon from "vue-material-design-icons/PencilOutline.vue"
+import BackIcon from "vue-material-design-icons/ArrowLeft.vue"
+import ReplyIcon from "vue-material-design-icons/ArrowLeftTop.vue"
+import ForwardIcon from "vue-material-design-icons/ArrowRightTop.vue"
 
 const props = defineProps({
     iconString: String,
@@ -60,7 +63,10 @@ const iconMap = {
     more: shallowRef(MoreIcon),
     right: shallowRef(RightArrow),
     left: shallowRef(LeftArrow),
-    pencil: shallowRef(PencilIcon)
+    pencil: shallowRef(PencilIcon),
+    back: shallowRef(BackIcon),
+    reply: shallowRef(ReplyIcon),
+    forward: shallowRef(ForwardIcon),
 }
 
 let icon = ref(iconMap[iconString.value] || null)

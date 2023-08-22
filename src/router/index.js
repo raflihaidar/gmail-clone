@@ -6,9 +6,16 @@ import InboxView from '../views/InboxView.vue'
 import StarredView from '../views/StarredView.vue'
 import SnoozedView from '../views/SnoozedView.vue'
 import DraftView from '../views/DraftView.vue'
+import LoginView from '../views/LoginView.vue'
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+    {
+      path: '/',
+      name: 'login',
+      component: LoginView
+    },
     {
       path: '/email',
       name: 'email',

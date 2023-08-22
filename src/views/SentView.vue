@@ -14,19 +14,21 @@
             </div>
         </div>
         <div class="p-auto border-b-2 border-gray-200" v-for="(item, index) in datas" :key="index">
-            <router-link class="w-full h-auto flex items-center justify-between gap-x-2 text-sm hover:shadow-xl"
-                :to="`message/${item.id}`" @mouseover="setHover(index, true)" @mouseleave="setHover(index, false)">
+            <div class="w-full h-auto flex items-center justify-between gap-x-2 text-sm hover:shadow-xl cursor-pointer"
+                @click="handleToDetail($event, item.id)" @mouseover="setHover(index, true)"
+                @mouseleave="setHover(index, false)">
                 <div class="flex items-center w-[17%] mx-auto">
                     <IconComponent :size="19" text="Select" iconString="checkbox" />
                     <IconComponent :size="19" text="Not Starred" iconString="star" />
-                    <div>To : {{ item.to }}</div>
+                    <div>To: {{ item.to }}</div>
                 </div>
                 <div class="flex items-center w-[60%] mx-auto">
-                    <span>{{ item.subject }} </span>
+                    <span v-if="item.subject != ''">{{ item.subject }} </span>
+                    <span v-else>(no subject)</span>
                     <span class="mx-1">-</span>
                     <span class="text-gray-500">{{ item.content }}</span>
                 </div>
-                <div class="flex items-center w-[25%] box-border mx-auto">
+                <div class="flex items-center w-[25%] box-border mx-auto delete">
                     <div v-if="hoverIndex === index" class="flex items-center" :class="sideBarStatus ? 'pl-28' : 'pl-16'">
                         <IconComponent :size="19" text="Archive" iconString="archive" />
                         <IconComponent :size="19" text="Delete" iconString="trash" @click="deleteDataMessages(item.id)" />
@@ -36,7 +38,7 @@
                     <div v-else :class="sideBarStatus ? 'pl-56' : 'pl-40'">{{ item.month }} {{ item.date }}
                     </div>
                 </div>
-            </router-link>
+            </div>
         </div>
     </div>
 </template>
@@ -47,6 +49,7 @@ import { onBeforeMount, inject, ref } from 'vue';
 import IconComponent from '../components/IconComponent.vue';
 import { useDataDummyStore } from '../stores/dataDummy';
 import { storeToRefs } from 'pinia';
+import router from '../router';
 
 const hoverIndex = ref(null)
 const sideBarStatus = inject('sideBarstatus', ref(false))
@@ -62,6 +65,23 @@ const setHover = (index, isHover) => {
 const deleteDataMessages = (id) => {
     DummyStore.deleteData(id)
 }
+
+const handleToDetail = (event, id) => {
+    const deleteContainers = document.querySelectorAll('.delete');
+
+    let isInsideDeleteContainer = false;
+
+    deleteContainers.forEach((container) => {
+        if (container.contains(event.target)) {
+            isInsideDeleteContainer = true;
+        }
+    });
+
+    if (!isInsideDeleteContainer) {
+        router.push({ path: 'message/' + id });
+    }
+};
+
 
 onBeforeMount(() => {
     DummyStore.getDataDummy()

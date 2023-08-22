@@ -127,9 +127,9 @@ let leftBarMenu = reactive(
     ]
 )
 
-const addData = async (payload) => {
-    dataDummyStore.addData(payload)
-    newOpenMessage.value = false
+const addData = async (data) => {
+    dataDummyStore.addData(data)
+    discardDraft()
 }
 
 const handleIsClick = (index) => {
