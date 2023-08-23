@@ -8,6 +8,15 @@
       "date": 22,
       "month": "Aug",
       "id": 1
+    },
+    {
+      "name": "Rafli Haidar Nashif",
+      "to": "Agus",
+      "subject": "Tugas MTK",
+      "content": "Woy gus, kerjain tugas nya cepet",
+      "date": 23,
+      "month": "Aug",
+      "id": 2
     }
   ]
 }

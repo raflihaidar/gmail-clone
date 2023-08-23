@@ -89,30 +89,30 @@
 <script setup>
 
 import { useRoute } from 'vue-router'
-import { useDataDummyStore } from "../stores/dataDummy"
 import { storeToRefs } from 'pinia';
 import { inject, onMounted, ref } from 'vue';
 import ReplyIcon from "vue-material-design-icons/ArrowLeftTop.vue"
 import ForwardIcon from "vue-material-design-icons/ArrowRightTop.vue"
 import IconComponent from '../components/IconComponent.vue';
 import router from '../router';
+import { useUserStore } from '../stores/userStore';
 
-const store = useDataDummyStore();
-const { singleData } = storeToRefs(store)
+const userStore = useUserStore()
+const { singleData } = storeToRefs(userStore)
 const route = useRoute();
 const sideBarStatus = inject("sideBarstatus", ref(false))
 const Modal = ref("button");
 
-const deleteDataMessages = () => {
-  store.deleteData(route.params.id)
-  router.push({ name: 'sent' })
-}
+// const deleteDataMessages = () => {
+//   store.deleteData(route.params.id)
+//   router.push({ name: 'sent' })
+// }
 
 const discardDraft = () => {
   Modal.value = 'button'
 }
 
-onMounted(async () => {
-  await store.getDataDetail(route.params.id)
-})
+// onMounted(async () => {
+//   await store.getDataDetail(route.params.id)
+// })
 </script>

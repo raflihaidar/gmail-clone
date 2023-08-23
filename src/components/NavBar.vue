@@ -1,12 +1,7 @@
 <template>
-    <div class="flex w-full border-2 justify-between items-center px-4 py-4 bg-slate-100">
+    <div class="flex w-full border-2 justify-between items-center px-4 py-4 bg-slate-100" id="UserComponent">
         <div class="flex items-center gap-x-2 w-[20%]">
-            <div data-drawer-target="sidebar" data-drawer-show="sidebar" aria-controls="sidebar" @click="OpenSideBar"
-                v-show="sideBarStatus" data-drawer-backdrop="false" data-drawer-body-scrolling="false">
-                <IconComponent iconString="menu" text="Menu Utama" />
-            </div>
-            <div data-drawer-target="sidebar" data-drawer-hide="sidebar" aria-controls="sidebar" @click="OpenSideBar"
-                v-show="!sideBarStatus" data-drawer-backdrop="false" data-drawer-body-scrolling="false">
+            <div @click="OpenSideBar">
                 <IconComponent iconString="menu" text="Menu Utama" />
             </div>
             <div class="cursor-pointer">
@@ -26,7 +21,31 @@
             <IconComponent iconString="help" text="Help" />
             <IconComponent iconString="settings" text="Settings" />
             <IconComponent iconString="dots" text="Google Aplications" />
-            <div class="bg-slate-200 rounded-full w-11 h-11">
+            <div class="bg-slate-200 rounded-full  w-11 h-11 cursor-pointer" @click="handleUserProfieModal">
+                <img :src="userStore.picture" :alt="userStore.firstName + 'img'" class="rounded-full w-full h-full">
+            </div>
+        </div>
+
+
+        <div class="bg-slate-100 w-[35%] py-5 mx-auto text-center fixed top-20 right-1 z-30 rounded-xl custom-shadow"
+            v-if="userProfileModal">
+            <div class="flex justify-center items-center">
+                <span class="text-sm text-center w-[93%] pl-5 mx-auto border-box">{{ userStore.email }}</span>
+                <span class="w-[7%] mx-auto">
+                    <IconComponent iconString="close" :size="19" @click="handleUserProfieModal" />
+                </span>
+            </div>
+            <div class="grid items-center justify-center gap-y-5">
+                <span class="w-[30%] mx-auto cursor-pointer">
+                    <img :src="userStore.picture" :alt="userStore.firstName + 'img'" class="rounded-full">
+                </span>
+                <span class="text-xl">
+                    Hi, {{ userStore.firstName }}
+                </span>
+                <button class="w-[100%] border py-1 px-2 rounded-full focus:shadow-inner shadow text-blue-500 text-lg"
+                    @click="handleSignOut">
+                    Sign Out of Gmail
+                </button>
             </div>
         </div>
     </div>
@@ -36,10 +55,16 @@
 <script setup>
 import { ref, watchEffect, inject } from 'vue';
 import IconComponent from './IconComponent.vue';
+import { useUserStore } from '../stores/userStore'
+import { storeToRefs } from 'pinia';
+import router from '../router';
 
 const search = ref(false)
 const searchInput = ref("");
 const sideBarStatus = inject('sideBarstatus');
+const userProfileModal = ref(false)
+const userStore = useUserStore()
+const { state } = storeToRefs(userStore)
 
 const OpenSideBar = () => {
     sideBarStatus.value = !sideBarStatus.value
@@ -53,6 +78,10 @@ const handleDeleteInput = () => {
     searchInput.value = ''
 }
 
+const handleUserProfieModal = () => {
+    userProfileModal.value = !userProfileModal.value
+}
+
 const handleClickOutside = (event) => { //fungsi dijalankan setiap nilai search bernilai benar
     const clickedElement = event.target;
     const searchContainer = document.querySelector('.search-container'); // Change this selector to match your actual search container
@@ -62,6 +91,11 @@ const handleClickOutside = (event) => { //fungsi dijalankan setiap nilai search 
     }
 };
 
+const handleSignOut = () => {
+    userStore.signOut()
+    setTimeout(() => router.push({ name: 'login' }), 200)
+}
+
 watchEffect(() => {
     if (search.value) {
         document.addEventListener('click', handleClickOutside);
@@ -69,6 +103,14 @@ watchEffect(() => {
         document.removeEventListener('click', handleClickOutside);
     }
 });
-
-
 </script>
+
+<style lang="scss">
+#UserComponent {
+    .custom-shadow {
+        box-shadow: -1px 1px 6px -2px rgba(36, 36, 36, 0.58);
+        -webkit-box-shadow: -1px 1px 6px -2px rgba(36, 36, 36, 0.58);
+        -moz-box-shadow: -1px 1px 6px -2px rgba(36, 36, 36, 0.58);
+    }
+}
+</style>

@@ -1,8 +1,7 @@
 <template>
     <div class="bg-slate-100">
-        <aside id="sidebar"
-            class="fixed top-[5.6rem] left-0 z-10 h-screen px-2 py-1 overflow-y-auto transition-transform -translate-x-full bg-slate-100 w-72"
-            tabindex="-1" aria-labelledby="sidebar">
+        <div
+            class="fixed top-[5.6rem] left-0 z-10 h-screen px-2 py-1 overflow-y-auto transition-transform bg-slate-100 w-72">
             <div class="h-full py-4 overflow-y-auto bg-slate-100">
                 <ul>
                     <li class="flex items-center bg-sky-200 w-[50%] text-center gap-x-2 px-3 py-4 rounded-lg text-sm mb-5 hover:shadow-lg transition-shadow"
@@ -25,7 +24,7 @@
                     </li>
                 </ul>
             </div>
-        </aside>
+        </div>
 
 
         <div class="w-[37%] h-[73vh] shadow-xl bg-white fixed z-20 bottom-0 right-12 rounded-lg" v-if="newOpenMessage"
@@ -40,18 +39,17 @@
             </div>
             <div class="border-b-2 border-gray-100 py-1">
                 <input type="text" placeholder="Recipients" class="w-full border-none outline-none focus:ring-0 text-sm"
-                    v-model="payload.to">
+                    v-model="toEmail">
             </div>
             <div class="border-b-2 border-gray-100 py-1">
                 <input type="text" placeholder="Subject" class="w-full border-none outline-none focus:ring-0 text-sm"
-                    v-model="payload.subject">
+                    v-model="subject">
             </div>
             <div>
-                <textarea id="textArea" class="w-full h-80 resize-none focus:ring-0 border-none"
-                    v-model="payload.content"></textarea>
+                <textarea id="textArea" class="w-full h-80 resize-none focus:ring-0 border-none" v-model="body"></textarea>
             </div>
             <div class="flex w-full px-3 justify-between items-center">
-                <button class="bg-blue-600 rounded-full text-white w-20 py-2" @click="addData(payload)">
+                <button class="bg-blue-600 rounded-full text-white w-20 py-2" @click="addData">
                     Send
                 </button>
 
@@ -70,27 +68,16 @@ import SendIcon from "vue-material-design-icons/SendOutline.vue"
 import FileIcon from "vue-material-design-icons/FileOutline.vue"
 import IconComponent from "./IconComponent.vue"
 import router from "../router"
-import { ref, reactive } from "vue"
-import { useDataDummyStore } from "../stores/dataDummy"
-import { storeToRefs } from "pinia"
+import { ref, reactive, inject, onMounted } from "vue"
+import { useUserStore } from "../stores/userStore"
 
-const dataDummyStore = useDataDummyStore()
-const { datas } = storeToRefs(dataDummyStore)
-const lastElement = datas.value.slice(-1)
-const count = ref(lastElement.id)
-const month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
+const UserStore = useUserStore()
+const sideBarStatus = inject('sideBarstatus')
 const newOpenMessage = ref(false)
-const d = new Date();
 
-let payload = reactive({
-    id: count.value,
-    name: "Rafli Haidar Nashif",
-    to: "",
-    subject: "",
-    content: "",
-    date: d.getDate(),
-    month: month[d.getMonth()]
-})
+const toEmail = ref('')
+const subject = ref('')
+const body = ref('')
 
 let leftBarMenu = reactive(
     [
@@ -127,10 +114,18 @@ let leftBarMenu = reactive(
     ]
 )
 
-const addData = async (data) => {
-    dataDummyStore.addData(data)
+const addData = async () => {
+    await UserStore.sendEmail({
+        toEmail: toEmail.value,
+        subject: subject.value,
+        body: body.value,
+    })
     discardDraft()
 }
+
+onMounted(() => {
+    UserStore.getEmailsByEmailAddress()
+})
 
 const handleIsClick = (index) => {
     leftBarMenu.forEach((x) => {
@@ -141,15 +136,9 @@ const handleIsClick = (index) => {
 }
 
 const discardDraft = () => {
-    payload = {
-        id: count.value,
-        name: "Rafli Haidar Nashif",
-        to: "",
-        subject: "",
-        content: "",
-        date: d.getDate(),
-        month: month[d.getMonth()]
-    }
+    toEmail.value = ''
+    subject.value = ''
+    body.value = ''
     newOpenMessage.value = false
 }
 
@@ -167,7 +156,6 @@ const handleMinimize = (even) => {
         target.className = target.className.replace('-bottom-[30rem]', 'bottom-0')
     }
 }
-
 
 
 </script>

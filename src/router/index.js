@@ -8,6 +8,8 @@ import SnoozedView from '../views/SnoozedView.vue'
 import DraftView from '../views/DraftView.vue'
 import LoginView from '../views/LoginView.vue'
 
+import { useUserStore } from '../stores/userStore'
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -18,6 +20,10 @@ const router = createRouter({
     },
     {
       path: '/email',
+      beforeEnter(to, from, next) {
+        if (useUserStore().email) next()
+        else next({ name: '/' })
+      },
       name: 'email',
       component: MainView,
       children: [
