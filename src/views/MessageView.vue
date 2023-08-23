@@ -1,8 +1,8 @@
 <template>
-  <div classs="w-[95%]" :class="sideBarStatus ? 'ml-2' : 'ml-80'">
+  <div classs="w-[95%]" :class="sideBarStatus ? 'ml-80' : 'ml-2'">
     <div class="flex items-center justify-between w-full mb-5" id="nav-icon">
       <span class="flex items-center w-[65%]">
-        <router-link to="/email/sent">
+        <router-link to="/email/">
           <IconComponent iconString="back" text="Back to sent email" :size="19" />
         </router-link>
         <IconComponent iconString="archive" text="Archive" :size="19" />
@@ -10,7 +10,7 @@
         <IconComponent iconString="clock" text="Snoozed" :size="19" />
         <IconComponent iconString="more" text="More" :size="19" />
       </span>
-      <span class="flex items-center w-[35%] mx-auto" :class="sideBarStatus ? 'pl-80' : 'pl-56'">
+      <span class="flex items-center w-[35%] mx-auto" :class="sideBarStatus ? 'pl-56' : 'pl-80'">
         <IconComponent iconString="left" text="Newer" :size="19" />
         <IconComponent iconString="right" text="Older" :size="19" />
         <IconComponent iconString="pencil" text="input tools on/of" :size="19" />
@@ -18,24 +18,25 @@
     </div>
 
     <div class="w-[93%] mx-auto mb-5 text-xl text-black" id="subject">
-      <p v-if="singleData.subject !== ''">{{ singleData.subject }}</p>
+      <p v-if="email.subject !== ''">{{ email.subject }}</p>
       <span v-else>(no subject)</span>
     </div>
 
     <div class="flex gap-x-2 mb-5 w-[90%] justify-between items-center" id="content">
       <div class="bg-slate-200 rounded-full w-14 h-12" id="img-profile">
+        <!-- <img :src="userStore.picture" alt="img profile" class="w-full h-full rounded-full"> -->
       </div>
       <div class="w-full" id="left-content">
-        <span class="font-semibold">{{ singleData.name }}</span>
-        <span class="text-xs text-gray-400">rafli.haidar30@gmail.com</span>
+        <span class="font-semibold">{{ email.name }}</span>
+        <span class="text-xs text-gray-400">{{ email.fromEmail }}</span>
         <div class="text-xs">
-          <p>To : {{ singleData.to }}</p>
-          <div class="my-3 w-full">{{ singleData.content }}</div>
+          <p>To : {{ email.toEmail }}</p>
+          <div class="my-3 w-full">{{ email.body }}</div>
         </div>
       </div>
       <span class="text-xs text-gray-400 font-bold" :class="sideBarStatus ? 'pr-0' : 'pr-10'" id="right-content">{{
-        singleData.month }} {{ singleData.date
-  }}</span>
+        email.createdAt
+      }}</span>
     </div>
 
     <div class="flex gap-x-4 w-[93%] mx-auto modal" id="botton" v-if="Modal === 'button'">
@@ -89,19 +90,18 @@
 <script setup>
 
 import { useRoute } from 'vue-router'
-import { storeToRefs } from 'pinia';
 import { inject, onMounted, ref } from 'vue';
 import ReplyIcon from "vue-material-design-icons/ArrowLeftTop.vue"
 import ForwardIcon from "vue-material-design-icons/ArrowRightTop.vue"
 import IconComponent from '../components/IconComponent.vue';
-import router from '../router';
 import { useUserStore } from '../stores/userStore';
 
 const userStore = useUserStore()
-const { singleData } = storeToRefs(userStore)
 const route = useRoute();
-const sideBarStatus = inject("sideBarstatus", ref(false))
+const sideBarStatus = inject("sideBarStatus", ref(false))
 const Modal = ref("button");
+
+const email = ref({})
 
 // const deleteDataMessages = () => {
 //   store.deleteData(route.params.id)
@@ -112,7 +112,21 @@ const discardDraft = () => {
   Modal.value = 'button'
 }
 
-// onMounted(async () => {
-//   await store.getDataDetail(route.params.id)
-// })
+onMounted(async () => {
+  const res = await userStore.getEmailById(route.params.id)
+
+  await userStore.emailHasBeenViewed(res.id)
+
+  email.value = {
+    id: res.id,
+    body: res.body,
+    createdAt: res.createdAt,
+    firstName: res.firstName,
+    fromEmail: res.fromEmail,
+    lastName: res.lastName,
+    subject: res.subject,
+    hasViewed: res.hasViewed,
+    toEmail: res.toEmail
+  }
+})
 </script>

@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-slate-100">
+    <div class="bg-slate-100" v-if="sideBarStatus">
         <div
             class="fixed top-[5.6rem] left-0 z-10 h-screen px-2 py-1 overflow-y-auto transition-transform bg-slate-100 w-72">
             <div class="h-full py-4 overflow-y-auto bg-slate-100">
@@ -68,11 +68,11 @@ import SendIcon from "vue-material-design-icons/SendOutline.vue"
 import FileIcon from "vue-material-design-icons/FileOutline.vue"
 import IconComponent from "./IconComponent.vue"
 import router from "../router"
-import { ref, reactive, inject, onMounted } from "vue"
+import { ref, reactive, inject } from "vue"
 import { useUserStore } from "../stores/userStore"
 
 const UserStore = useUserStore()
-const sideBarStatus = inject('sideBarstatus')
+const sideBarStatus = inject('sideBarStatus')
 const newOpenMessage = ref(false)
 
 const toEmail = ref('')
@@ -122,10 +122,6 @@ const addData = async () => {
     })
     discardDraft()
 }
-
-onMounted(() => {
-    UserStore.getEmailsByEmailAddress()
-})
 
 const handleIsClick = (index) => {
     leftBarMenu.forEach((x) => {

@@ -12,5 +12,5 @@ import RightSideBar from '../components/RightSideBar.vue'
 import { provide, ref } from 'vue';
 const sideBarStatus = ref(true)
 
-provide('sideBarstatus', sideBarStatus)
+provide('sideBarStatus', sideBarStatus)
 </script>

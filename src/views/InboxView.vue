@@ -1,12 +1,12 @@
 <template>
-  <div :class="sideBarStatus ? 'ml-0' : 'ml-72'">
+  <div :class="sideBarStatus ? 'ml-72' : 'ml-0'">
     <div class="w-full flex items-center justify-between">
       <div class="flex w-[65%]">
         <IconComponent iconString="checkbox" text="Select" :size="19" />
         <IconComponent iconString="refresh" text="Refresh" :size="19" />
         <IconComponent iconString="more" text="More" :size="19" />
       </div>
-      <div :class="sideBarStatus ? 'pl-56' : 'pl-40'" class="flex items-center w-[35%] box-border mx-auto">
+      <div :class="sideBarStatus ? 'pl-40' : 'pl-56'" class="flex items-center w-[35%] box-border mx-auto">
         <span class="text-sm text-gray-500 hover:bg-slate-200 p-2 rounded-lg">1 - 50 of 2,859</span>
         <IconComponent iconString="left" text="Newer" :size="19" />
         <IconComponent iconString="right" text="Older" :size="19" />
@@ -21,7 +21,7 @@
         <div class="flex items-center w-[17%] mx-auto">
           <IconComponent :size="19" text="Select" iconString="checkbox" />
           <IconComponent :size="19" text="Not Starred" iconString="star" />
-          <div>{{ item.toE }}</div>
+          <div>{{ item.firstName }}</div>
         </div>
         <div class="flex items-center w-[60%] mx-auto">
           <span v-if="item.subject != ''">{{ item.subject }} </span>
@@ -46,17 +46,22 @@
 
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { inject, onMounted, ref } from 'vue';
 import IconComponent from '../components/IconComponent.vue';
 import { useUserStore } from '../stores/userStore';
 import router from '../router';
 
+const sideBarStatus = inject('sideBarStatus')
 const hoverIndex = ref(false)
 const userStore = useUserStore()
 
 onMounted(() => {
   userStore.getEmailsByEmailAddress()
 })
+
+const deleteDataMessages = async (id) => {
+  await userStore.deleteEmail(id)
+}
 
 const handleToDetail = (event, id) => {
   const deleteContainers = document.querySelectorAll('.delete');
@@ -70,7 +75,7 @@ const handleToDetail = (event, id) => {
   });
 
   if (!isInsideDeleteContainer) {
-    router.push({ path: 'email/message/' + id });
+    router.push({ path: '/email/message/' + id });
   }
 };
 

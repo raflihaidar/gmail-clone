@@ -73,7 +73,7 @@ export const useUserStore = defineStore('user', {
     },
 
     async getEmailById(id) {
-      const docRef = doc(db, 'emails', id)
+      const docRef = doc(db, 'emails/', id)
       const docSnap = await getDoc(docRef)
 
       if (docSnap.exists()) {
@@ -105,6 +105,7 @@ export const useUserStore = defineStore('user', {
           hasViewed: false,
           createdAt: Date.now()
         })
+        console.log(data)
       } catch (error) {
         console.log(error)
       }

@@ -56,15 +56,13 @@
 import { ref, watchEffect, inject } from 'vue';
 import IconComponent from './IconComponent.vue';
 import { useUserStore } from '../stores/userStore'
-import { storeToRefs } from 'pinia';
 import router from '../router';
 
 const search = ref(false)
 const searchInput = ref("");
-const sideBarStatus = inject('sideBarstatus');
+const sideBarStatus = inject('sideBarStatus');
 const userProfileModal = ref(false)
 const userStore = useUserStore()
-const { state } = storeToRefs(userStore)
 
 const OpenSideBar = () => {
     sideBarStatus.value = !sideBarStatus.value
@@ -92,7 +90,7 @@ const handleClickOutside = (event) => { //fungsi dijalankan setiap nilai search 
 };
 
 const handleSignOut = () => {
-    userStore.signOut()
+    userStore.clearUser()
     setTimeout(() => router.push({ name: 'login' }), 200)
 }
 
