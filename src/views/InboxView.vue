@@ -24,9 +24,7 @@
         @click="handleToDetail($event, item.id)" @mouseover="setHover(index, true)" @mouseleave="setHover(index, false)">
         <div class="flex items-center w-[17%] mx-auto">
           <IconComponent :iconSize="19" iconColor="#636363" hoverColor='hover:bg-gray-200' text="Select"
-            iconString='checklist' class='checkButton' v-if="isChecked" />
-          <IconComponent :iconSize="19" iconColor="#636363" hoverColor='hover:bg-gray-200' text="Select"
-            iconString='checkbox' class='checkButton' v-else />
+            iconString='checkbox' class='checkButton' />
           <IconComponent :iconSize="19" iconColor="#636363" hoverColor='hover:bg-gray-200' text="Not Starred"
             iconString="star" />
           <div :class="item.hasViewed ? 'font-normal' : 'font-bold'">{{ item.firstName }}</div>
@@ -67,7 +65,6 @@ import router from '../router';
 const sideBarStatus = inject('sideBarStatus')
 const hoverIndex = ref(false)
 const userStore = useUserStore()
-const isChecked = ref(false)
 
 onMounted(() => {
   userStore.getEmailsByEmailAddress()
@@ -79,10 +76,8 @@ const deleteDataMessages = async (id) => {
 
 const handleToDetail = (event, id) => {
   const deleteContainers = document.querySelectorAll('.delete');
-  const checkButton = document.querySelectorAll('.checkButton')
 
   let isInsideDeleteContainer = false;
-  let isInsidecheckButton = false
 
   deleteContainers.forEach((item) => {
     if (item.contains(event.target)) {
@@ -90,16 +85,8 @@ const handleToDetail = (event, id) => {
     }
   });
 
-  checkButton.forEach((item) => {
-    if (item.contains(event.target)) {
-      isInsidecheckButton = true
-    }
-  })
-
-  if (!isInsideDeleteContainer && !isInsidecheckButton) {
+  if (!isInsideDeleteContainer) {
     router.push({ path: '/email/message/' + id });
-  } else {
-    isChecked.value = !isChecked.value
   }
 };
 
