@@ -10,10 +10,12 @@ import {
   setDoc,
   getDoc,
   deleteDoc,
+  updateDoc,
   orderBy
 } from 'firebase/firestore'
 import { db } from '../../firebase-init'
 import moment from 'moment'
+import { computed } from 'vue'
 
 axios.defaults.baseURL = 'http://localhost:4001/'
 
@@ -24,7 +26,8 @@ export const useUserStore = defineStore('user', {
     picture: '',
     firstName: '',
     lastName: '',
-    emails: []
+    emails: [],
+    length: 0
   }),
   actions: {
     async getUserDetailsFromGoogle(data) {
@@ -61,10 +64,12 @@ export const useUserStore = defineStore('user', {
               subject: doc.data().subject,
               body: doc.data().body,
               hasViewed: doc.data().hasViewed,
+              isClicked: doc.data().isClicked,
               createdAt: moment(doc.data().createdAt).format('MMM D HH:mm')
             })
           })
           this.$state.emails = resultArray
+          this.$state.length = resultArray.length
         },
         (error) => {
           console.log(error)
@@ -103,9 +108,20 @@ export const useUserStore = defineStore('user', {
           subject: data.subject,
           body: data.body,
           hasViewed: false,
+          isClicked: false,
           createdAt: Date.now()
         })
         console.log(data)
+      } catch (error) {
+        console.log(error)
+      }
+    },
+
+    async checkedBox(id, bool) {
+      try {
+        await updateDoc(doc(db, 'emails/' + id), {
+          isClicked: bool
+        })
       } catch (error) {
         console.log(error)
       }

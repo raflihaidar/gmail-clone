@@ -68,7 +68,7 @@ import SendIcon from "vue-material-design-icons/SendOutline.vue"
 import FileIcon from "vue-material-design-icons/FileOutline.vue"
 import IconComponent from "./IconComponent.vue"
 import router from "../router"
-import { ref, reactive, inject } from "vue"
+import { ref, reactive, inject, computed } from "vue"
 import { useUserStore } from "../stores/userStore"
 
 const UserStore = useUserStore()
@@ -86,7 +86,7 @@ let leftBarMenu = reactive(
             isClick: true,
             icon: InboxIcon,
             path: 'inbox',
-            length: UserStore.emails.length
+            length: computed(() => UserStore.length)
         },
         {
             name: "Starred",

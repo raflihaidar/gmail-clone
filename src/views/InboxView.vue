@@ -20,11 +20,13 @@
 
     <div class="p-auto border-b-2 border-gray-200" v-for="(item, index) in userStore.emails" :key="index">
       <div class="w-full h-auto flex items-center justify-between gap-x-2 text-sm hover:shadow-xl cursor-pointer"
-        :class="[item.hasViewed ? 'bg-gray-100' : 'bg-white', isChecked ? 'bg-blue-300 font-bold' : null]"
-        @click="handleToDetail($event, item.id)" @mouseover="setHover(index, true)" @mouseleave="setHover(index, false)">
+        :class="[item.hasViewed ? 'bg-gray-100' : 'bg-white']" @click="handleToDetail($event, item.id)"
+        @mouseover="setHover(index, true)" @mouseleave="setHover(index, false)">
         <div class="flex items-center w-[17%] mx-auto">
-          <IconComponent :iconSize="19" iconColor="#636363" hoverColor='hover:bg-gray-200' text="Select"
-            iconString='checkbox' class='checkButton' />
+          <!-- <IconComponent :iconSize="19" iconColor="#636363" hoverColor='hover:bg-gray-200' text="Select"
+            :iconString="item.isClicked ? 'checklist' : 'checkbox'" class='checkButton' @click="handleChecked(item.id)" /> -->
+          <component :is="item.isClicked ? CheckListIcon : CheckboxIcon" @click="handleChecked(item.id)"
+            class='checkButton ml-3' :size="19" />
           <IconComponent :iconSize="19" iconColor="#636363" hoverColor='hover:bg-gray-200' text="Not Starred"
             iconString="star" />
           <div :class="item.hasViewed ? 'font-normal' : 'font-bold'">{{ item.firstName }}</div>
@@ -60,6 +62,8 @@
 import { inject, onMounted, ref } from 'vue';
 import IconComponent from '../components/IconComponent.vue';
 import { useUserStore } from '../stores/userStore';
+import CheckListIcon from "vue-material-design-icons/CheckboxOutline.vue"
+import CheckboxIcon from "vue-material-design-icons/CheckboxBlankOutline.vue"
 import router from '../router';
 
 const sideBarStatus = inject('sideBarStatus')
@@ -75,18 +79,29 @@ const deleteDataMessages = async (id) => {
   await userStore.deleteEmail(id)
 }
 
+const handleChecked = async (id) => {
+  isChecked.value = !isChecked.value
+  await userStore.checkedBox(id, isChecked.value)
+}
+
 const handleToDetail = (event, id) => {
   const deleteContainers = document.querySelectorAll('.delete');
-
+  const checkbox = document.querySelectorAll('.checkButton')
   let isInsideDeleteContainer = false;
+  let isInsideCheckBox = false;
+
+  checkbox.forEach((item) => {
+    if (item.contains(event.target)) {
+      isInsideCheckBox = true
+    }
+  })
 
   deleteContainers.forEach((item) => {
     if (item.contains(event.target)) {
       isInsideDeleteContainer = true;
     }
   });
-
-  if (!isInsideDeleteContainer) {
+  if (!isInsideDeleteContainer && !isInsideCheckBox) {
     router.push({ path: '/email/message/' + id });
   }
 };
@@ -94,6 +109,4 @@ const handleToDetail = (event, id) => {
 const setHover = (index, isHover) => {
   hoverIndex.value = isHover ? index : null;
 }
-
-
 </script>
