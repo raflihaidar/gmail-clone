@@ -65,6 +65,7 @@ import router from '../router';
 const sideBarStatus = inject('sideBarStatus')
 const hoverIndex = ref(false)
 const userStore = useUserStore()
+const isChecked = ref(false)
 
 onMounted(() => {
   userStore.getEmailsByEmailAddress()
@@ -76,8 +77,10 @@ const deleteDataMessages = async (id) => {
 
 const handleToDetail = (event, id) => {
   const deleteContainers = document.querySelectorAll('.delete');
+  const checkButton = document.querySelectorAll('.checkButton')
 
   let isInsideDeleteContainer = false;
+  let isInsidecheckButton = false
 
   deleteContainers.forEach((item) => {
     if (item.contains(event.target)) {
@@ -85,8 +88,16 @@ const handleToDetail = (event, id) => {
     }
   });
 
-  if (!isInsideDeleteContainer) {
+  checkButton.forEach((item) => {
+    if (item.contains(event.target)) {
+      isInsidecheckButton = true
+    }
+  })
+
+  if (!isInsideDeleteContainer && !isInsidecheckButton) {
     router.push({ path: '/email/message/' + id });
+  } else {
+    isChecked.value = !isChecked.value
   }
 };
 
