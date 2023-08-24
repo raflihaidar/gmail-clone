@@ -1,7 +1,7 @@
 <template>
-    <div :class="display === '' ? 'hidden' : 'block'" class="cursor-pointer hover:bg-gray-200 rounded-full p-3"
-        :data-tooltip-target="`tooltip-no-arrow-${iconString}`" :data-tooltip-placement="bottom">
-        <component v-if="icon" :is="icon" :display="display" :size="size" />
+    <div :class="[
+        display === '' ? 'hidden' : 'block', hoverColor]" class="cursor-pointer rounded-full p-3" v-if="iconString">
+        <component v-if="icon" :is="icon" :display="display" :size="iconSize" :fillColor="iconColor" />
         <span v-else>Ikon tidak ditemukan</span>
         <div :id="`tooltip-no-arrow-${iconString}`" role="tooltip"
             class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity delay-150 bg-gray-600 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-600">
@@ -34,15 +34,18 @@ import PencilIcon from "vue-material-design-icons/PencilOutline.vue"
 import BackIcon from "vue-material-design-icons/ArrowLeft.vue"
 import ReplyIcon from "vue-material-design-icons/ArrowLeftTop.vue"
 import ForwardIcon from "vue-material-design-icons/ArrowRightTop.vue"
+import CheckListIcon from "vue-material-design-icons/CheckboxOutline.vue"
 
 const props = defineProps({
     iconString: String,
     display: String,
+    hoverColor: String,
     text: String,
-    size: String
+    iconSize: String,
+    iconColor: String
 })
 
-const { iconString, display, text, size } = toRefs(props)
+const { iconString, display, text, iconSize, hoverColor } = toRefs(props)
 
 const iconMap = {
     menu: shallowRef(MenuIcon),
@@ -55,6 +58,7 @@ const iconMap = {
     minus: shallowRef(MinusIcon),
     trash: shallowRef(TrashIcon),
     checkbox: shallowRef(CheckboxIcon),
+    checklist: shallowRef(CheckListIcon),
     star: shallowRef(StarOutline),
     archive: shallowRef(ArchiveIcon),
     email: shallowRef(EmailIcon),

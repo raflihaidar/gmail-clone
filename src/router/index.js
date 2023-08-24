@@ -1,14 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import MainView from '../views/MainView.vue'
-import MessageView from '../views/MessageView.vue'
-import SentView from '../views/SentView.vue'
-import InboxView from '../views/InboxView.vue'
-import StarredView from '../views/StarredView.vue'
-import SnoozedView from '../views/SnoozedView.vue'
-import DraftView from '../views/DraftView.vue'
-import LoginView from '../views/LoginView.vue'
 
 import { useUserStore } from '../stores/userStore'
+import { defineAsyncComponent } from 'vue'
+import LoadingComponent from '../components/LoadingComponent.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -16,7 +10,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'login',
-      component: LoginView
+      component: () => import('../views/LoginView.vue')
     },
     {
       path: '/email',
@@ -25,37 +19,43 @@ const router = createRouter({
         else next({ name: '/' })
       },
       name: 'email',
-      component: MainView,
+      component: () => import('../views/MainView.vue'),
       children: [
         {
           path: '',
           name: 'inbox',
-          component: InboxView
+          component: defineAsyncComponent({
+            loader: () => import('../views/InboxView.vue'),
+            loadingComponent: LoadingComponent
+          })
         },
         {
           path: 'starred',
           name: 'starred',
-          component: StarredView
+          component: () => import('../views/StarredView.vue')
         },
         {
           path: 'snoozed',
           name: 'snoozed',
-          component: SnoozedView
+          component: () => import('../views/SnoozedView.vue')
         },
         {
           path: 'sent',
           name: 'sent',
-          component: SentView
+          component: () => import('../views/SentView.vue')
         },
         {
           path: 'draft',
           name: 'draft',
-          component: DraftView
+          component: () => import('../views/DraftView.vue')
         },
         {
           path: 'message/:id',
           name: 'detailMessage',
-          component: MessageView
+          component: defineAsyncComponent({
+            loader: () => import('../views/MessageView.vue'),
+            loadingComponent: LoadingComponent
+          })
         }
       ]
     }

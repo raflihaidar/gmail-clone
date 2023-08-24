@@ -27,14 +27,14 @@
         <!-- <img :src="userStore.picture" alt="img profile" class="w-full h-full rounded-full"> -->
       </div>
       <div class="w-full" id="left-content">
-        <span class="font-semibold">{{ email.name }}</span>
+        <span class="font-semibold mr-2">{{ email.firstName }}</span>
         <span class="text-xs text-gray-400">{{ email.fromEmail }}</span>
         <div class="text-xs">
           <p>To : {{ email.toEmail }}</p>
           <div class="my-3 w-full">{{ email.body }}</div>
         </div>
       </div>
-      <span class="text-xs text-gray-400 font-bold" :class="sideBarStatus ? 'pr-0' : 'pr-10'" id="right-content">{{
+      <span class="text-xs w-40" :class="sideBarStatus ? 'pr-0' : 'pr-10'" id="right-content">{{
         email.createdAt
       }}</span>
     </div>
@@ -95,6 +95,7 @@ import ReplyIcon from "vue-material-design-icons/ArrowLeftTop.vue"
 import ForwardIcon from "vue-material-design-icons/ArrowRightTop.vue"
 import IconComponent from '../components/IconComponent.vue';
 import { useUserStore } from '../stores/userStore';
+import router from '../router';
 
 const userStore = useUserStore()
 const route = useRoute();
@@ -103,10 +104,10 @@ const Modal = ref("button");
 
 const email = ref({})
 
-// const deleteDataMessages = () => {
-//   store.deleteData(route.params.id)
-//   router.push({ name: 'sent' })
-// }
+const deleteDataMessages = async () => {
+  await userStore.deleteEmail(route.params.id)
+  router.push({ name: 'inbox' })
+}
 
 const discardDraft = () => {
   Modal.value = 'button'
