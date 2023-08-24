@@ -77,10 +77,8 @@ const deleteDataMessages = async (id) => {
 
 const handleToDetail = (event, id) => {
   const deleteContainers = document.querySelectorAll('.delete');
-  const checkButton = document.querySelectorAll('.checkButton')
 
   let isInsideDeleteContainer = false;
-  let isInsidecheckButton = false
 
   deleteContainers.forEach((item) => {
     if (item.contains(event.target)) {
@@ -88,16 +86,8 @@ const handleToDetail = (event, id) => {
     }
   });
 
-  checkButton.forEach((item) => {
-    if (item.contains(event.target)) {
-      isInsidecheckButton = true
-    }
-  })
-
-  if (!isInsideDeleteContainer && !isInsidecheckButton) {
+  if (!isInsideDeleteContainer) {
     router.push({ path: '/email/message/' + id });
-  } else {
-    isChecked.value = !isChecked.value
   }
 };
 
