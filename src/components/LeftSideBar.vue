@@ -20,7 +20,7 @@
                             <component :is="item.icon" :size="17" />
                             <span>{{ item.name }}</span>
                         </div>
-                        <p>26</p>
+                        <p>{{ item.length }}</p>
                     </li>
                 </ul>
             </div>
@@ -85,37 +85,42 @@ let leftBarMenu = reactive(
             name: "Inbox",
             isClick: true,
             icon: InboxIcon,
-            path: 'inbox'
+            path: 'inbox',
+            length: UserStore.emails.length
         },
         {
             name: "Starred",
             isClick: false,
             icon: StarIcon,
-            path: 'starred'
+            path: 'starred',
+            length: 0
         },
         {
             name: "Snoozed",
             isClick: false,
             icon: ClockIcon,
-            path: 'snoozed'
+            path: 'snoozed',
+            length: 0
         },
         {
             name: "Sent",
             isClick: false,
             icon: SendIcon,
-            path: "sent"
+            path: "sent",
+            length: 0
         },
         {
             name: "Drafts",
             isClick: false,
             icon: FileIcon,
-            path: 'draft'
+            path: 'draft',
+            length: 0
         },
     ]
 )
 
-const addData = async () => {
-    await UserStore.sendEmail({
+const addData = () => {
+    UserStore.sendEmail({
         toEmail: toEmail.value,
         subject: subject.value,
         body: body.value,
@@ -152,6 +157,4 @@ const handleMinimize = (even) => {
         target.className = target.className.replace('-bottom-[30rem]', 'bottom-0')
     }
 }
-
-
 </script>

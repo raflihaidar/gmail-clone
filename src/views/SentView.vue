@@ -13,7 +13,7 @@
                 <IconComponent iconString="pencil" text="input tools on/of" :size="19" />
             </div>
         </div>
-        <div class="p-auto border-b-2 border-gray-200" v-for="(item, index) in datas" :key="index">
+        <!-- <div class="p-auto border-b-2 border-gray-200" v-for="(item, index) in datas" :key="index">
             <div class="w-full h-auto flex items-center justify-between gap-x-2 text-sm hover:shadow-xl cursor-pointer"
                 @click="handleToDetail($event, item.id)" @mouseover="setHover(index, true)"
                 @mouseleave="setHover(index, false)">
@@ -39,31 +39,21 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
 </template>
 
 
 <script setup>
-import { onBeforeMount, inject, ref } from 'vue';
+import { inject, ref } from 'vue';
 import IconComponent from '../components/IconComponent.vue';
-import { useDataDummyStore } from '../stores/dataDummy';
-import { storeToRefs } from 'pinia';
 import router from '../router';
 
 const hoverIndex = ref(null)
-const sideBarStatus = inject('sideBarstatus', ref(false))
-
-
-const DummyStore = useDataDummyStore()
-const { datas } = storeToRefs(DummyStore)
+const sideBarStatus = inject('sideBarStatus', ref(false))
 
 const setHover = (index, isHover) => {
     hoverIndex.value = isHover ? index : null;
-}
-
-const deleteDataMessages = (id) => {
-    DummyStore.deleteData(id)
 }
 
 const handleToDetail = (event, id) => {
@@ -81,10 +71,5 @@ const handleToDetail = (event, id) => {
         router.push({ path: 'message/' + id });
     }
 };
-
-
-onBeforeMount(() => {
-    DummyStore.getDataDummy()
-})
 
 </script>

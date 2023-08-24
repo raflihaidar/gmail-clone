@@ -2,25 +2,31 @@
     <div class="flex w-full border-2 justify-between items-center px-4 py-4 bg-slate-100" id="UserComponent">
         <div class="flex items-center gap-x-2 w-[20%]">
             <div @click="OpenSideBar">
-                <IconComponent iconString="menu" text="Menu Utama" />
+                <IconComponent iconString="menu" text="Menu Utama" :iconSize="25" iconColor="#636363"
+                    hoverColor='hover:bg-gray-200' />
             </div>
             <div class="cursor-pointer">
-                <img src="../../public/img/GmailLogo.png" alt="Gmail logo" class="w-[50%]">
+                <img src="../../public/img/GmailLogo.png" alt="Gmail logo" class="w-[50%] h-[50%]">
             </div>
         </div>
 
         <div class="flex items-center w-[50%] bg-slate-200 rounded-full py-1 px-3 search-container gap-x-2"
             :class="search ? 'shadow-lg bg-white' : null" @click="handleClickSearch">
-            <IconComponent iconString="search" text="Search" />
+            <IconComponent iconString="search" text="Search" :iconSize="25" iconColor="#636363"
+                hoverColor='hover:bg-gray-200' />
             <input type="text" class="outline-none border-none w-full focus:ring-0 bg-inherit" placeholder="Telusuri Email"
                 v-model="searchInput">
-            <IconComponent iconString="close" :display="searchInput" @click="handleDeleteInput" text="Close" />
+            <IconComponent iconString="close" :display="searchInput" @click="handleDeleteInput" text="Close" :iconSize="25"
+                iconColor="#636363" hoverColor='hover:bg-gray-200' />
         </div>
 
         <div class="flex justify-end items-center w-[30%] gap-x-7">
-            <IconComponent iconString="help" text="Help" />
-            <IconComponent iconString="settings" text="Settings" />
-            <IconComponent iconString="dots" text="Google Aplications" />
+            <IconComponent iconString="help" text="Help" :iconSize="25" iconColor="#636363"
+                hoverColor='hover:bg-gray-200' />
+            <IconComponent iconString="settings" text="Settings" :iconSize="25" iconColor="#636363"
+                hoverColor='hover:bg-gray-200' />
+            <IconComponent iconString="dots" text="Google Aplications" :iconSize="25" iconColor="#636363"
+                hoverColor='hover:bg-gray-200' />
             <div class="bg-slate-200 rounded-full  w-11 h-11 cursor-pointer" @click="handleUserProfieModal">
                 <img :src="userStore.picture" :alt="userStore.firstName + 'img'" class="rounded-full w-full h-full">
             </div>
@@ -32,7 +38,8 @@
             <div class="flex justify-center items-center">
                 <span class="text-sm text-center w-[93%] pl-5 mx-auto border-box">{{ userStore.email }}</span>
                 <span class="w-[7%] mx-auto">
-                    <IconComponent iconString="close" :size="19" @click="handleUserProfieModal" />
+                    <IconComponent iconString="close" :iconSize="19" iconColor="#636363" hoverColor='hover:bg-gray-200'
+                        @click="handleUserProfieModal" />
                 </span>
             </div>
             <div class="grid items-center justify-center gap-y-5">
