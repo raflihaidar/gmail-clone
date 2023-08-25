@@ -23,8 +23,6 @@
         :class="[item.hasViewed ? 'bg-gray-100' : 'bg-white']" @click="handleToDetail($event, item.id)"
         @mouseover="setHover(index, true)" @mouseleave="setHover(index, false)">
         <div class="flex items-center w-[17%] mx-auto">
-          <!-- <IconComponent :iconSize="19" iconColor="#636363" hoverColor='hover:bg-gray-200' text="Select"
-            :iconString="item.isClicked ? 'checklist' : 'checkbox'" class='checkButton' @click="handleChecked(item.id)" /> -->
           <component :is="item.isClicked ? CheckListIcon : CheckboxIcon" @click="handleChecked(item.id)"
             class='checkButton ml-3' :size="19" />
           <IconComponent :iconSize="19" iconColor="#636363" hoverColor='hover:bg-gray-200' text="Not Starred"
