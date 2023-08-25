@@ -1,8 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-
 import { useUserStore } from '../stores/userStore'
-import { defineAsyncComponent } from 'vue'
-import LoadingComponent from '../components/LoadingComponent.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -24,10 +21,7 @@ const router = createRouter({
         {
           path: '',
           name: 'inbox',
-          component: defineAsyncComponent({
-            loader: () => import('../views/InboxView.vue'),
-            loadingComponent: LoadingComponent
-          })
+          component: () => import('../views/InboxView.vue')
         },
         {
           path: 'starred',
@@ -52,10 +46,7 @@ const router = createRouter({
         {
           path: 'message/:id',
           name: 'detailMessage',
-          component: defineAsyncComponent({
-            loader: () => import('../views/MessageView.vue'),
-            loadingComponent: LoadingComponent
-          })
+          component: () => import('../views/MessageView.vue')
         }
       ]
     },

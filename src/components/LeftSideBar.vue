@@ -32,9 +32,9 @@
             <div class="flex justify-between items-center bg-slate-100 text-sm px-3">
                 <p>New Messages</p>
                 <div class="flex w-20% items-center">
-                    <IconComponent text="Minus" iconString="minus" :size="17" @click="handleMinimize" id="minus" />
-                    <IconComponent text="Full Screen" iconString="fullScreen" :size="17" />
-                    <IconComponent text="Save & Close" iconString="close" :size="17" @click="saveNSlose" />
+                    <IconComponent text="Minus" iconString="minus" :iconSize="17" @click="handleMinimize" id="minus" />
+                    <IconComponent text="Full Screen" iconString="fullScreen" :iconSize="17" />
+                    <IconComponent text="Save & Close" iconString="close" :iconSize="17" @click="saveNSlose" />
                 </div>
             </div>
             <div class="border-b-2 border-gray-100 py-1">
@@ -53,7 +53,7 @@
                     Send
                 </button>
 
-                <IconComponent :size="17" iconString="trash" text="Discard Draft" @click="discardDraft" />
+                <IconComponent :iconSize="17" iconString="trash" text="Discard Draft" @click="discardDraft" />
             </div>
         </div>
     </div>
@@ -68,7 +68,7 @@ import SendIcon from "vue-material-design-icons/SendOutline.vue"
 import FileIcon from "vue-material-design-icons/FileOutline.vue"
 import IconComponent from "./IconComponent.vue"
 import router from "../router"
-import { ref, reactive, inject, computed } from "vue"
+import { ref, reactive, inject, computed, shallowRef } from "vue"
 import { useUserStore } from "../stores/userStore"
 
 const UserStore = useUserStore()
@@ -84,35 +84,35 @@ let leftBarMenu = reactive(
         {
             name: "Inbox",
             isClick: true,
-            icon: InboxIcon,
+            icon: shallowRef(InboxIcon),
             path: 'inbox',
             length: computed(() => UserStore.length)
         },
         {
             name: "Starred",
             isClick: false,
-            icon: StarIcon,
+            icon: shallowRef(StarIcon),
             path: 'starred',
             length: 0
         },
         {
             name: "Snoozed",
             isClick: false,
-            icon: ClockIcon,
+            icon: shallowRef(ClockIcon),
             path: 'snoozed',
             length: 0
         },
         {
             name: "Sent",
             isClick: false,
-            icon: SendIcon,
+            icon: shallowRef(SendIcon),
             path: "sent",
             length: 0
         },
         {
             name: "Drafts",
             isClick: false,
-            icon: FileIcon,
+            icon: shallowRef(FileIcon),
             path: 'draft',
             length: 0
         },

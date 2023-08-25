@@ -15,7 +15,6 @@ import {
 } from 'firebase/firestore'
 import { db } from '../../firebase-init'
 import moment from 'moment'
-import { computed } from 'vue'
 
 axios.defaults.baseURL = 'http://localhost:4001/'
 
@@ -111,7 +110,6 @@ export const useUserStore = defineStore('user', {
           isClicked: false,
           createdAt: Date.now()
         })
-        console.log(data)
       } catch (error) {
         console.log(error)
       }

@@ -20,7 +20,6 @@
     </div>
 
     <!-- BODY -->
-
     <div>
       <div class="w-[93%] mx-auto mb-5 text-xl text-black" id="subject">
         <p v-if="email.subject !== ''">{{ email.subject }}</p>
@@ -29,7 +28,6 @@
 
       <div class="flex gap-x-2 mb-5 w-[90%] justify-between items-center" id="content">
         <div class="bg-slate-200 rounded-full w-14 h-12" id="img-profile">
-          <!-- <img :src="userStore.picture" alt="img profile" class="w-full h-full rounded-full"> -->
         </div>
         <div class="w-full" id="left-content">
           <span class="font-semibold mr-2">{{ email.firstName }}</span>
