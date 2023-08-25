@@ -147,6 +147,18 @@ export const useUserStore = defineStore('user', {
       }
     },
 
+    async deleteEmailFromCheckBox() {
+      try {
+        this.emails.forEach(async (item) => {
+          if (item.isClicked) {
+            await deleteDoc(doc(db, 'emails', item.id))
+          }
+        })
+      } catch (error) {
+        console.log()
+      }
+    },
+
     clearUser() {
       this.$state.firstName = ''
       this.$state.lastName = ''

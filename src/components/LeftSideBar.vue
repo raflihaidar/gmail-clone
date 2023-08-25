@@ -37,16 +37,17 @@
                     <IconComponent text="Save & Close" iconString="close" :iconSize="17" @click="saveNSlose" />
                 </div>
             </div>
-            <div class="border-b-2 border-gray-100 py-1">
+            <div class="border-b-2 border-gray-100 py-3 px-2">
                 <input type="text" placeholder="Recipients" class="w-full border-none outline-none focus:ring-0 text-sm"
                     v-model="toEmail">
             </div>
-            <div class="border-b-2 border-gray-100 py-1">
+            <div class="border-b-2 border-gray-100 py-3 px-2">
                 <input type="text" placeholder="Subject" class="w-full border-none outline-none focus:ring-0 text-sm"
                     v-model="subject">
             </div>
             <div>
-                <textarea id="textArea" class="w-full h-80 resize-none focus:ring-0 border-none" v-model="body"></textarea>
+                <textarea id="textArea" class="w-full h-80 resize-none focus:ring-0 border-none outline-none py-3 px-2"
+                    v-model="body"></textarea>
             </div>
             <div class="flex w-full px-3 justify-between items-center">
                 <button class="bg-blue-600 rounded-full text-white w-20 py-2" @click="addData">

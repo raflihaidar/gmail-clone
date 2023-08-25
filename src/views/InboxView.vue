@@ -2,11 +2,11 @@
   <div :class="sideBarStatus ? 'ml-72' : 'ml-0'">
     <div class="w-full flex items-center justify-between">
       <div class="flex w-[65%]">
-        <IconComponent iconString="checkbox" text="Select" :iconSize="19" iconColor="#636363"
-          hoverColor='hover:bg-gray-200' />
-        <IconComponent iconString="refresh" text="Refresh" :iconSize="19" iconColor="#636363"
-          hoverColor='hover:bg-gray-200' />
-        <IconComponent iconString="more" text="More" :iconSize="19" iconColor="#636363" hoverColor='hover:bg-gray-200' />
+        <IconComponent iconString="checkbox" :iconSize="19" iconColor="#636363" hoverColor='hover:bg-gray-200' />
+        <IconComponent iconString="refresh" :iconSize="19" iconColor="#636363" hoverColor='hover:bg-gray-200' />
+        <IconComponent iconString="trash" :iconSize="19" iconColor="#636363" hoverColor='hover:bg-gray-200'
+          @click="deleteEmailIsClicked" />
+        <IconComponent iconString="more" :iconSize="19" iconColor="#636363" hoverColor='hover:bg-gray-200' />
       </div>
       <div :class="sideBarStatus ? 'pl-40' : 'pl-56'" class="flex items-center w-[35%] box-border mx-auto">
         <span class="text-sm text-gray-500 hover:bg-slate-200 p-2 rounded-lg">1 - 50 of 2,859</span>
@@ -103,6 +103,10 @@ const handleToDetail = (event, id) => {
     router.push({ path: '/email/message/' + id });
   }
 };
+
+const deleteEmailIsClicked = async () => {
+  await userStore.deleteEmailFromCheckBox()
+}
 
 const setHover = (index, isHover) => {
   hoverIndex.value = isHover ? index : null;

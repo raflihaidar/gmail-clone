@@ -5,17 +5,23 @@
     <div class=" flex items-center justify-between w-full mb-5" id="nav-icon">
       <span class="flex items-center w-[65%]">
         <router-link to="/email/">
-          <IconComponent iconString="back" text="Back to sent email" :size="19" />
+          <IconComponent iconString="back" text="Back to sent email" :size="19" iconColor="#636363"
+            hoverColor='hover:bg-gray-200' />
         </router-link>
-        <IconComponent iconString="archive" text="Archive" :size="19" />
-        <IconComponent iconString="trash" text="Delete" :size="19" @click="deleteDataMessages" />
-        <IconComponent iconString="clock" text="Snoozed" :size="19" />
-        <IconComponent iconString="more" text="More" :size="19" />
+        <IconComponent iconString="archive" text="Archive" :iconSize="19" iconColor="#636363"
+          hoverColor='hover:bg-gray-200' />
+        <IconComponent iconString="trash" text="Delete" :iconSize="19" iconColor="#636363" hoverColor='hover:bg-gray-200'
+          @click="deleteDataMessages" />
+        <IconComponent iconString="clock" text="Snoozed" :iconSize="19" iconColor="#636363"
+          hoverColor='hover:bg-gray-200' />
+        <IconComponent iconString="more" text="More" :iconSize="19" iconColor="#636363" hoverColor='hover:bg-gray-200' />
       </span>
       <span class="flex items-center w-[35%] mx-auto" :class="sideBarStatus ? 'pl-56' : 'pl-80'">
-        <IconComponent iconString="left" text="Newer" :size="19" />
-        <IconComponent iconString="right" text="Older" :size="19" />
-        <IconComponent iconString="pencil" text="input tools on/of" :size="19" />
+        <IconComponent iconString="left" text="Newer" :iconSize="19" iconColor="#636363" hoverColor='hover:bg-gray-200' />
+        <IconComponent iconString="right" text="Older" :iconSize="19" iconColor="#636363"
+          hoverColor='hover:bg-gray-200' />
+        <IconComponent iconString="pencil" text="input tools on/of" :iconSize="19" iconColor="#636363"
+          hoverColor='hover:bg-gray-200' />
       </span>
     </div>
 
@@ -62,14 +68,14 @@
         </div>
         <div class="w-full hover:shadow-lg border pt-5 rounded-xl">
           <div>
-            <IconComponent iconString="reply" :size="19" />
+            <IconComponent iconString="reply" :iconSize="19" />
           </div>
           <textarea id="textArea" class="w-full h-40 resize-none focus:ring-0 border-none overflow-hidden"></textarea>
           <div class="flex w-full p-3 justify-between items-center border shadow-lg">
             <button class="bg-blue-600 rounded-full text-white w-20 py-2">
               Send
             </button>
-            <IconComponent :size="17" iconString="trash" text="Discard Draft" @click="discardDraft" />
+            <IconComponent :iconSize="17" iconString="trash" text="Discard Draft" @click="discardDraft" />
           </div>
         </div>
       </div>
@@ -83,7 +89,7 @@
             <button class="bg-blue-600 rounded-full text-white w-20 py-2">
               Send
             </button>
-            <IconComponent :size="17" iconString="trash" text="Discard Draft" @click="discardDraft" />
+            <IconComponent :iconSize="17" iconString="trash" text="Discard Draft" @click="discardDraft" />
           </div>
         </div>
       </div>
